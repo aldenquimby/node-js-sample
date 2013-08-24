@@ -1,13 +1,16 @@
 {
   "name": "node-js-sample",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a sample node.js app for heroku",
   "main": "web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "~3.3.4"
+    "express": "3.3.5",
+    "async": "0.2.9",
+    "underscore": "1.5.1",
+    "mongoose": "3.6.18"
   },
   "engines": {
     "node": "0.10.13",
@@ -15,13 +18,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-sample"
+    "url": "https://github.com/aldenquimby/node-js-sample"
   },
   "keywords": [
     "node",
     "heroku"
   ],
-  "author": "Mark Pundsack",
-  "license": "BSD",
-  "gitHead": "90fd58e343c29e54fc1d4e19036595500b2bdc21"
+  "author": {
+    "name": "Alden Quimby",
+    "email": "aldenquimby@gmail.com"
+  },
+  "license": "MIT",
+  "readmeFilename": "README.md"
 }
