@@ -1,7 +1,7 @@
-var wines = require('./routes/wines');
 var quotes = require('./routes/quotes');
 var blogs = require('./routes/blogs');
 var errors = require('./errors');
+var keys = require('./keys');
 
 var express = require('express');
 var _ = require('underscore');
@@ -17,7 +17,7 @@ db.once('open', function callback() {
   console.log('opened mongo connection');
   blogs.registerSchema();
 });
-mongoose.connect('CONN_HERE');
+mongoose.connect(keys.dbConnString);
 
 var app = express();
 
@@ -36,10 +36,6 @@ app.get('/quotes', quotes.findAll);
 app.post('/quotes', quotes.create);
 app.get('/quotes/:id', quotes.findById);
 app.delete('/quotes/:id', quotes.delete);
-
-// wines
-app.get('/wines', wines.findAll);
-app.get('/wines/:id', wines.findById);
 
 // blogs
 app.get('/blogs', blogs.findAll);
