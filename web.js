@@ -4,7 +4,6 @@ var errors = require('./errors');
 var keys = require('./keys');
 
 var express = require('express');
-var _ = require('underscore');
 var async = require('async');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
@@ -29,6 +28,12 @@ app.use(express.methodOverride());
 // routing
 app.get('/', function(req, res) {
 	res.send('Hello world!');
+});
+
+// all responses are json
+app.all("*", function(req, res, next) {
+	res.type('application/json');
+	next();
 });
 
 // quotes

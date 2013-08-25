@@ -64,8 +64,7 @@ exports.findAll = function(req, res) {
 	Blog.find(function(err, blogs) {
 		if (err) {
 			errors.dbErrorHandler(err, 'failed to find blogs');
-			res.statusCode = 404;
-			return res.send('Error 404: No blogs found');
+			return res.send(404, 'Error 404: No blogs found');
 		}
 
 		res.json(blogs);
@@ -77,8 +76,7 @@ exports.findById = function(req, res) {
 	Blog.findById(req.params.id, function (err, blog) {
 		if (err) {
 			errors.dbErrorHandler(err, 'failed to find blog by id');
-			res.statusCode = 404;
-			return res.send('Error 404: No blog found');
+			return res.send(404, 'Error 404: No blog found');
 		}
 
 		res.json(blog);
@@ -91,24 +89,25 @@ exports.create = function(req, res) {
 	if(!req.body.hasOwnProperty('title') ||
 	   !req.body.hasOwnProperty('author') || 
 	   !req.body.hasOwnProperty('body')) {
-		res.statusCode = 400;
-		return res.send('Error 400: Post syntax incorrect.');
+		return res.send(400, 'Error 400: Post syntax incorrect.');
 	}
 
 	var newBlog = new Blog({
 		title: req.body.title,
 		author: req.body.author,
-		body: req.body.body
+		body: req.body.body,
+		comments: [],
+		hidden: null,
+		meta: null
 	});
 
 	newBlog.save(function (err, created) {
 		if (err) {
 			errors.dbErrorHandler(err, 'Failed to save blog.');		
-			res.statusCode = 500;
-			return res.send('Error 500: Failed to create blog.');
+			return res.send(500, 'Error 500: Failed to create blog.');
 		}
 
-		res.json(created);
+		res.json(201, created);
 	});
 }
 
@@ -117,8 +116,7 @@ exports.delete = function(req, res) {
 	Blog.findByIdAndRemove(req.params.id, function(err, blog) {
 		if (err) {
 			errors.dbErrorHandler(err, 'failed to delete blog by id');
-			res.statusCode = 404;
-			return res.send('Error 404: No blog found');
+			return res.send(404, 'Error 404: No blog found');
 		}
 			
 		res.json(true);
@@ -127,13 +125,34 @@ exports.delete = function(req, res) {
 
 exports.update = function(req, res) {
 	var Blog = db.model('Blog');
-	Blog.findByIdAndUpdate(req.params.id, function(err, blog) {
+
+	var updatedBlog = {};
+
+	if (req.body.hasOwnProperty('title')) {
+		updatedBlog.title = req.body.title;
+	}
+	if (req.body.hasOwnProperty('author')) {
+		updatedBlog.author = req.body.author;
+	}
+	if (req.body.hasOwnProperty('body')) {
+		updatedBlog.body = req.body.body;
+	}
+	if (req.body.hasOwnProperty('comments')) {
+		updatedBlog.comments = req.body.comments;
+	}
+	if (req.body.hasOwnProperty('hidden')) {
+		updatedBlog.hidden = req.body.hidden;
+	}
+	if (req.body.hasOwnProperty('meta')) {
+		updatedBlog.meta = req.body.meta;
+	}
+
+	Blog.findByIdAndUpdate(req.params.id, updatedBlog, function(err, blog) {
 		if (err) {
 			errors.dbErrorHandler(err, 'failed to update blog by id');
-			res.statusCode = 404;
-			return res.send('Error 404: No blog found');
+			return res.send(404, 'Error 404: No blog found');
 		}
-			
-		res.json(true);
+
+		res.json(blog);
 	});
 }
