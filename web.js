@@ -14,7 +14,7 @@ db.once('open', function callback() {
   console.log('opened mongo connection');
   blogs.registerSchema();
 });
-mongoose.connect(keys.dbConnString);
+mongoose.connect(process.env.MongoUrl || keys.MongoUrl);
 
 var app = express();
 
