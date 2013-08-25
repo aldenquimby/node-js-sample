@@ -1,5 +1,5 @@
 {
-  "name": "mers-sample",
+  "name": "express-sample",
   "version": "0.0.3",
   "description": "a sample node.js app for heroku",
   "main": "web.js",
@@ -8,13 +8,15 @@
   },
   "dependencies": {
     "express": "3.3.5",
-    "mongoose": "3.6.18",
-    "mers": "0.6.2-0"
+    "async": "0.2.9",
+    "underscore": "1.5.1",
+    "mongoose": "3.6.18"
   },
   "devDependencies": {
     "express": "3.3.5",
+    "async": "0.2.9",
+    "underscore": "1.5.1",
     "mongoose": "3.6.18",
-    "mers": "0.6.2-0",
     "frisby": "0.6.8"
   },
   "engines": {

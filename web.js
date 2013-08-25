@@ -1,6 +1,4 @@
-var quotes = require('./routes/quotes');
 var blogs = require('./routes/blogs');
-var errors = require('./errors');
 var keys = require('./keys');
 
 var express = require('express');
@@ -10,7 +8,7 @@ var db = mongoose.connection;
 
 // connect to mongo
 db.on('error', function(err) {
-	errors.dbErrorHandler(err, 'failed to connect to mongo.');
+  console.error(err);
 });
 db.once('open', function callback() {
   console.log('opened mongo connection');
@@ -20,14 +18,18 @@ mongoose.connect(keys.dbConnString);
 
 var app = express();
 
-// express helpers
-app.use(express.logger());
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-
-// routing
-app.get('/', function(req, res) {
-	res.send('Hello world!');
+// config
+app.configure(function () {
+  app.use(express.logger());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+});
+app.configure('development', function(){
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+app.configure('production', function(){
+    app.use(express.errorHandler());
 });
 
 // all responses are json
@@ -36,23 +38,17 @@ app.all("*", function(req, res, next) {
 	next();
 });
 
-// quotes
-app.get('/quotes', quotes.findAll);
-app.post('/quotes', quotes.create);
-app.get('/quotes/:id', quotes.findById);
-app.delete('/quotes/:id', quotes.delete);
+// routing
+app.get('/', function(req, res) {
+	res.send('{"message":"Hello world"}!');
+});
 
 // blogs
 app.get('/blogs', blogs.findAll);
 app.post('/blogs', blogs.create);
 app.get('/blogs/:id', blogs.findById);
 app.put('/blogs/:id', blogs.update);
-app.delete('/blogs/:id', blogs.delete);
-
-// error handlers
-app.use(errors.logErrors);
-app.use(errors.clientErrorHandler);
-app.use(errors.errorHandler);
+app.del('/blogs/:id', blogs.remove);
 
 // start server
 var port = process.env.PORT || 5000;

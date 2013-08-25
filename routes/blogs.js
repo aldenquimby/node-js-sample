@@ -1,6 +1,5 @@
 
 var _ = require('underscore');
-var errors = require('../errors');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
 
@@ -48,7 +47,7 @@ exports.populateSchema = function() {
 	_.each(blogs, function(blog) {
 		blog.save(function (err) {
 		  if (err) {
-		  	errors.dbErrorHandler(err, 'Failed to save blog.');
+			console.error(err);
 		  }
 		  else {
 		  	console.log('saved blog');
@@ -63,7 +62,7 @@ exports.findAll = function(req, res) {
 	var Blog = db.model('Blog');
 	Blog.find(function(err, blogs) {
 		if (err) {
-			errors.dbErrorHandler(err, 'failed to find blogs');
+			console.error(err);
 			return res.send(404, 'Error 404: No blogs found');
 		}
 
@@ -75,7 +74,7 @@ exports.findById = function(req, res) {
 	var Blog = db.model('Blog');
 	Blog.findById(req.params.id, function (err, blog) {
 		if (err) {
-			errors.dbErrorHandler(err, 'failed to find blog by id');
+			console.error(err);
 			return res.send(404, 'Error 404: No blog found');
 		}
 
@@ -103,7 +102,7 @@ exports.create = function(req, res) {
 
 	newBlog.save(function (err, created) {
 		if (err) {
-			errors.dbErrorHandler(err, 'Failed to save blog.');		
+			console.error(err);
 			return res.send(500, 'Error 500: Failed to create blog.');
 		}
 
@@ -111,11 +110,11 @@ exports.create = function(req, res) {
 	});
 }
 
-exports.delete = function(req, res) {
+exports.remove = function(req, res) {
 	var Blog = db.model('Blog');
 	Blog.findByIdAndRemove(req.params.id, function(err, blog) {
 		if (err) {
-			errors.dbErrorHandler(err, 'failed to delete blog by id');
+			console.error(err);
 			return res.send(404, 'Error 404: No blog found');
 		}
 			
@@ -149,7 +148,7 @@ exports.update = function(req, res) {
 
 	Blog.findByIdAndUpdate(req.params.id, updatedBlog, function(err, blog) {
 		if (err) {
-			errors.dbErrorHandler(err, 'failed to update blog by id');
+			console.error(err);
 			return res.send(404, 'Error 404: No blog found');
 		}
 
