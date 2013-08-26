@@ -1,3 +1,5 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 var blogs = require('./routes/blogs');
 var keys = require('./keys');
 
@@ -14,7 +16,8 @@ db.once('open', function callback() {
   console.log('opened mongo connection');
   blogs.registerSchema();
 });
-mongoose.connect(process.env.MongoUrl || keys.MongoUrl);
+console.log(JSON.stringify(process.env));
+mongoose.connect(process.env.DATABASE_URL || keys.DATABASE_URL);
 
 var app = express();
 
