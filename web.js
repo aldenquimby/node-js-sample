@@ -1,8 +1,10 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
-var blogs = require('./routes/blogs');
 var keys = require('./keys');
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.PORT = process.env.PORT || 5000;
+process.env.DATABASE_URL = process.env.DATABASE_URL || keys.DATABASE_URL;
+
+var blogs = require('./routes/blogs');
 var express = require('express');
 var async = require('async');
 var mongoose = require('mongoose');
@@ -16,8 +18,8 @@ db.once('open', function callback() {
   console.log('opened mongo connection');
   blogs.registerSchema();
 });
-console.log(JSON.stringify(process.env));
-mongoose.connect(process.env.DATABASE_URL || keys.DATABASE_URL);
+
+mongoose.connect(process.env.DATABASE_URL);
 
 var app = express();
 
@@ -54,7 +56,6 @@ app.put('/blogs/:id', blogs.update);
 app.del('/blogs/:id', blogs.remove);
 
 // start server
-var port = process.env.PORT || 5000;
-app.listen(port, function() {
-  console.log("Listening on " + port);
+app.listen(process.env.PORT, function() {
+  console.log("Listening on " + process.env.PORT);
 });
