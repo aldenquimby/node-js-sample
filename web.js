@@ -1,8 +1,6 @@
-var keys = require('./keys');
-
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 process.env.PORT = process.env.PORT || 5000;
-process.env.DATABASE_URL = process.env.DATABASE_URL || keys.DATABASE_URL;
+process.env.DATABASE_URL = process.env.DATABASE_URL || require('./keys').DATABASE_URL;
 
 var blogs = require('./routes/blogs');
 var express = require('express');
