@@ -75,7 +75,7 @@ exports.findById = function(req, res) {
 	Blog.findById(req.params.id, function (err, blog) {
 		if (err) {
 			console.error(err);
-			return res.send(404, 'Error 404: No blog found');
+			return res.send(404, 'Error 404: No blog found. ' + err);
 		}
 
 		res.json(blog);

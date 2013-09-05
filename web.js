@@ -4,7 +4,6 @@ process.env.DATABASE_URL = process.env.DATABASE_URL || require('./keys').DATABAS
 
 var blogs = require('./routes/blogs');
 var express = require('express');
-var async = require('async');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
 
