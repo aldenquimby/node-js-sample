@@ -3,6 +3,7 @@ process.env.PORT = process.env.PORT || 5000;
 process.env.DATABASE_URL = process.env.DATABASE_URL || require('./keys').DATABASE_URL;
 
 var blogs = require('./routes/blogs');
+var jquery = require('./routes/jquery');
 var express = require('express');
 var mongoose = require('mongoose');
 var db = mongoose.connection;
@@ -51,6 +52,9 @@ app.post('/blogs', blogs.create);
 app.get('/blogs/:id', blogs.findById);
 app.put('/blogs/:id', blogs.update);
 app.del('/blogs/:id', blogs.remove);
+
+// jquery
+app.get('/jquery', jquery.get);
 
 // start server
 app.listen(process.env.PORT, function() {
